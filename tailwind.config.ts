@@ -24,6 +24,8 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        'dark-blue': '#161F40',
+        'medium-blue': '#1C2F4F',
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -72,6 +74,9 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      backgroundImage: {
+        'custom-gradient': 'linear-gradient(90deg, rgba(22,31,64,1) 0%, rgba(27,45,74,1) 49%, rgba(22,31,64,1) 100%)',
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

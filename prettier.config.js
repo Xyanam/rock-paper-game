@@ -3,11 +3,12 @@
 module.exports = {
   trailingComma: "es5",
   bracketSpacing: true,
+  bracketSameLine: true,
   tabWidth: 2,
   semi: false,
   singleQuote: false,
-  printWidth: 80,
+  printWidth: 100,
   arrowParens: "always",
   tailwindConfig: "./tailwind.config.ts",
   plugins: ["prettier-plugin-tailwindcss"],
-};
+}
