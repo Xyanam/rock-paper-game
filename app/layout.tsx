@@ -22,6 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn(inter.className, "bg-custom-gradient")}>
         <Header />
+
         {children}
       </body>
     </html>

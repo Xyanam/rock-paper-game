@@ -7,7 +7,7 @@ import rockPaperImage from "../public/images/rock-background.png"
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
+    <main className="flex flex-col items-center justify-center min-h-screen-without-header">
       <div className="flex max-w-6xl flex-wrap items-center justify-center md:flex-nowrap">
         <div className="flex flex-col gap-4">
           <h1 className="max-w-2xl text-7xl font-bold text-white">
@@ -25,7 +25,8 @@ export default function Home() {
             <Link href='/game'>
               <Button className="px-7 py-6 text-base font-semibold">
                 Start for free
-              </Button></Link>
+              </Button>
+            </Link>
           </div>
         </div>
         <div>
