@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -23,8 +24,8 @@ export default function Home() {
               Rules
             </Button>
             <Link href='/game'>
-              <Button className="px-7 py-6 text-base font-semibold">
-                Start for free
+              <Button className="px-7 py-6 text-base font-semibold flex gap-2">
+                Start now <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
           </div>
