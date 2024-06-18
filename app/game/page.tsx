@@ -32,9 +32,9 @@ const Game = () => {
   }
 
   return (
-    <div className="flex justify-center items-center flex-col">
+    <div className="flex justify-center items-center flex-col mt-6 pb-6">
       <div className="border-white border px-10 py-4 rounded-md">
-        <div className='flex gap-6'>
+        <div className='flex gap-6 flex-col items-center sm:items-start sm:flex-row'>
           <h1 className="text-white text-4xl font-bold text-center flex items-center">
             <User className="w-10 h-10 mr-2" />
             You
@@ -59,7 +59,7 @@ const Game = () => {
         )}
       </div>
 
-      <div className="mt-14 flex gap-20">
+      <div className="mt-14 flex flex-col sm:flex-row gap-20">
         {userPick === null ? (
           <div className="flex flex-col justify-center items-center max-w-xl">
             <h1 className="text-white text-4xl font-bold">Take your pick</h1>

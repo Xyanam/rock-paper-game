@@ -15,22 +15,11 @@ interface GameOptionProps {
 }
 
 const images = {
-  rock: {
-    img: Rock,
-    color: 'blue'
-  },
-  paper: {
-    img: Paper,
-    color: 'orange'
-  },
-  scissors: {
-    img: Scissors,
-    color: 'red'
-  },
-  'no-access': {
-    img: Question,
-    color: 'white'
-  }
+  rock: Rock,
+  paper: Paper,
+  scissors: Scissors,
+  'no-access': Question,
+
 }
 
 const GameOption = ({ type, onClick }: GameOptionProps) => {
@@ -39,8 +28,8 @@ const GameOption = ({ type, onClick }: GameOptionProps) => {
   if (!src) return;
 
   return (
-    <div className={`w-48 h-48 bg-white rounded-full flex justify-center items-center cursor-pointer border-8 border-${src.color}-500 p-4 hover:bg-white/90 transition-all`} onClick={onClick}>
-      <Image src={src.img} alt={type} />
+    <div className={`w-48 h-48 bg-white rounded-full flex justify-center items-center cursor-pointer shadow-md shadow-black p-4 hover:bg-white/90 transition-all`} onClick={onClick}>
+      <Image src={src} alt={type} />
     </div>
   )
 }
