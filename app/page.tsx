@@ -7,10 +7,10 @@ import rockPaperImage from "../public/images/rock-background.png"
 
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen-without-header">
-      <div className="flex max-w-6xl flex-wrap items-center justify-center md:flex-nowrap">
+    <main className="flex flex-col items-center justify-center min-h-screen-without-header px-10 pb-5">
+      <div className="flex max-w-6xl flex-wrap items-center justify-center md:flex-nowrap lg:flex-row flex-col lg:gap-0 gap-5 mt-10 lg:mt-0">
         <div className="flex flex-col gap-4">
-          <h1 className="max-w-2xl text-7xl font-bold text-white">
+          <h1 className="max-w-2xl md:text-7xl text-4xl font-bold text-white">
             Rock, Paper, Scissors Game
           </h1>
           <p className="max-w-xl text-xl text-gray-300">
