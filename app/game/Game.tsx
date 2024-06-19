@@ -10,7 +10,6 @@ import GameOption from '@/components/game-option';
 import { Button } from '@/components/ui/button';
 import { H1 } from '@/components/ui/typography';
 import { database } from '@/lib/configs/firebase-config';
-import { createRoom } from '@/lib/helpers/createRoom';
 import { determineWinner } from '@/lib/helpers/determineWinner';
 import RoomService from '@/lib/services/RoomService';
 import { getRandomNumber } from '@/lib/utils';
@@ -35,23 +34,6 @@ const Game = () => {
     setComputerPick(OptionsTypes[getRandomNumber(3)])
     setResult(null)
   }
-
-  useEffect(() => {
-    const fetchRoomData = async () => {
-
-      const docRef = doc(database, "rooms",
-        "bt2ZLwBJ6QrvbWYZpFQI");
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        console.log(docSnap.data())
-      } else {
-        console.log("No such document!");
-      }
-    }
-
-    fetchRoomData();
-  }, [])
 
   return (
     <div className="flex justify-center items-center flex-col mt-6 pb-6">

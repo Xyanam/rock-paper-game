@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 
 import "./globals.css"
 import Header from "@/components/layouts/header"
+import CustomToaster from '@/components/toaster/custom-toaster';
 import { cn } from "@/lib/utils"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -23,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn(inter.className, "bg-custom-gradient")}>
         <Header />
-
+        <CustomToaster />
         {children}
         <Analytics />
       </body>
