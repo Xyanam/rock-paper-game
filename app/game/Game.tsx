@@ -2,14 +2,12 @@
 
 import React, { useEffect, useState } from 'react'
 
-import { doc, getDoc } from 'firebase/firestore';
 import { Bot, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import GameOption from '@/components/game-option';
 import { Button } from '@/components/ui/button';
 import { H1 } from '@/components/ui/typography';
-import { database } from '@/lib/configs/firebase-config';
 import { determineWinner } from '@/lib/helpers/determineWinner';
 import RoomService from '@/lib/services/RoomService';
 import { getRandomNumber } from '@/lib/utils';

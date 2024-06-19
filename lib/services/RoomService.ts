@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from "firebase/firestore"
+import { arrayUnion, doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import toast from "react-hot-toast"
 import { v4 as uuidv4 } from "uuid"
@@ -17,7 +17,7 @@ export default class RoomService {
       await setDoc(docRef, {
         room_id: roomId,
         maxPlayers: 2,
-        players: ["", ""],
+        players: [],
       })
 
       router.push(`/game/${roomId}`)
@@ -42,5 +42,31 @@ export default class RoomService {
     }
   }
 
-  static async joinRoom() {}
+  static async joinRoom(roomData: IRoom, router: AppRouterInstance) {
+    const guestName = `guest ${roomData?.players.length + 1}`
+
+    try {
+      const docRef = doc(database, "rooms", roomData.room_id)
+
+      await updateDoc(docRef, {
+        players: arrayUnion(guestName),
+      })
+
+      router.push(`/game/${roomData.room_id}`)
+    } catch (error) {
+      toast.error(`Error joining room: ${error}`)
+    }
+  }
+
+  static async subscribeToRoomChanges(roomId: string, callback: (room: IRoom) => void) {
+    const docRef = doc(database, "rooms", roomId)
+
+    return onSnapshot(docRef, (doc) => {
+      if (doc.exists()) {
+        const roomData = doc.data() as IRoom
+
+        callback(roomData)
+      }
+    })
+  }
 }
