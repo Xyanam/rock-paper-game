@@ -2,11 +2,17 @@
 
 import React, { useEffect, useState } from 'react'
 
+import { doc, getDoc } from 'firebase/firestore';
 import { Bot, User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import GameOption from '@/components/GameOption';
+import GameOption from '@/components/game-option';
 import { Button } from '@/components/ui/button';
+import { H1 } from '@/components/ui/typography';
+import { database } from '@/lib/configs/firebase-config';
+import { createRoom } from '@/lib/helpers/createRoom';
 import { determineWinner } from '@/lib/helpers/determineWinner';
+import RoomService from '@/lib/services/RoomService';
 import { getRandomNumber } from '@/lib/utils';
 import { GameResult, OptionType, OptionsTypes } from '@/types/TGameOptions';
 
@@ -14,6 +20,7 @@ const Game = () => {
   const [computerPick, setComputerPick] = useState<OptionType>(OptionsTypes[getRandomNumber(3)]);
   const [userPick, setUserPick] = useState<OptionType | null>(null);
   const [result, setResult] = useState<GameResult | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     if (userPick && computerPick) {
@@ -29,28 +36,46 @@ const Game = () => {
     setResult(null)
   }
 
+  useEffect(() => {
+    const fetchRoomData = async () => {
+
+      const docRef = doc(database, "rooms",
+        "bt2ZLwBJ6QrvbWYZpFQI");
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log(docSnap.data())
+      } else {
+        console.log("No such document!");
+      }
+    }
+
+    fetchRoomData();
+  }, [])
+
   return (
     <div className="flex justify-center items-center flex-col mt-6 pb-6">
       <div className="border-white border px-10 py-4 rounded-md">
         <div className='flex gap-6 flex-col items-center sm:items-start sm:flex-row'>
-          <h1 className="text-white text-4xl font-bold text-center flex items-center">
+          <Button onClick={() => RoomService.createRoom(router)}>Create room</Button>
+          <H1 className='flex'>
             <User className="w-10 h-10 mr-2" />
             You
-          </h1>
+          </H1>
           <h1 className="text-white text-4xl font-bold text-center flex items-center">
             VS
           </h1>
-          <h1 className="text-white text-4xl font-bold text-center flex items-center">
+          <H1 className='flex'>
             <Bot className="w-10 h-10 mr-2" />
             Computer
-          </h1>
+          </H1>
         </div>
       </div>
 
       <div className="mt-14 flex flex-col sm:flex-row gap-20">
         {userPick === null ? (
           <div className="flex flex-col justify-center items-center max-w-xl">
-            <h1 className="text-white text-4xl font-bold">Take your pick</h1>
+            <H1>Take your pick</H1>
             <div className="flex mt-14 flex-wrap max-w-xl justify-center gap-10">
               {OptionsTypes.map((option) => (
                 <GameOption key={option} type={option} onClick={() => setUserPick(option)} />
@@ -60,7 +85,7 @@ const Game = () => {
         ) : (
           <div className='flex gap-24 items-center'>
             <div className='max-w-xl w-full flex flex-col justify-between h-full'>
-              <h1 className="text-white text-4xl font-bold text-center">Your pick</h1>
+              <H1 className="text-white text-4xl font-bold text-center">Your pick</H1>
               <div className="flex mt-14 flex-wrap justify-center gap-10">
                 <GameOption type={userPick} />
               </div>
@@ -68,9 +93,9 @@ const Game = () => {
 
             {result && (
               <div className="flex flex-col mt-4 max-w-lg w-full">
-                <h1 className={`text-4xl font-bold text-center ${result === 'win' ? 'text-green-500' : result === 'lose' ? 'text-red-500' : 'text-orange-500'}`}>
+                <H1 className={`text-4xl font-bold text-center ${result === 'win' ? 'text-green-500' : result === 'lose' ? 'text-red-500' : 'text-orange-500'}`}>
                   {result === 'win' ? 'You Win!' : result === 'lose' ? 'You Lose!' : "It's a Draw!"}
-                </h1>
+                </H1>
                 <Button className="mt-6 text-lg" onClick={handleReset}>
                   Play again
                 </Button>
@@ -78,7 +103,7 @@ const Game = () => {
             )}
 
             <div className='max-w-xl w-full flex flex-col justify-between h-full'>
-              <h1 className="text-white text-4xl font-bold text-center">Computer picked</h1>
+              <H1 className="text-white text-4xl font-bold text-center">Computer picked</H1>
               <div className="flex mt-14 flex-wrap justify-center gap-10">
                 <GameOption type={computerPick} />
               </div>
