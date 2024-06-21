@@ -45,6 +45,9 @@ const Rooms = ({ allRooms }: { allRooms: IRoom[] | null }) => {
         </Button>
       </div>
       <div className="mt-10 flex flex-col gap-4">
+        {!allRooms?.length && (
+          <h1 className="text-center text-xl text-gray-300">No rooms! You can create your own</h1>
+        )}
         {allRooms?.map((room) => {
           const playersCount = room.players ? Object.keys(room.players).length : 0
 

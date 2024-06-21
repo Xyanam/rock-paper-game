@@ -1,4 +1,4 @@
-import { onValue, ref } from "firebase/database"
+import { get, onValue, ref, remove } from "firebase/database"
 
 import { IRoom } from "@/types/IRoom"
 
@@ -22,6 +22,22 @@ export default class RoomsService {
       })
     } catch (error) {
       console.error(`Error getting room data: ${error}`)
+    }
+  }
+
+  static async removeEmptyRooms() {
+    const roomRef = ref(RTDB, "rooms")
+
+    const snapshot = await get(roomRef)
+    const roomData = snapshot.val() as Record<string, IRoom> | null
+
+    if (roomData) {
+      Object.keys(roomData).forEach(async (roomId) => {
+        const room: IRoom = roomData[roomId]
+        if (!room.players || Object.keys(room.players).length === 0) {
+          await remove(ref(RTDB, `rooms/${roomId}`))
+        }
+      })
     }
   }
 }

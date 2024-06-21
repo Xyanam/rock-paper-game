@@ -18,6 +18,12 @@ const RoomPage = () => {
     }
 
     RoomsService.getAllRooms(handleRoomsUpdate)
+
+    const interval: NodeJS.Timeout = setInterval(() => {
+      RoomsService.removeEmptyRooms()
+    }, 40000)
+
+    return () => clearInterval(interval)
   }, [])
 
   if (isLoading) return <H1>Loading...</H1>
