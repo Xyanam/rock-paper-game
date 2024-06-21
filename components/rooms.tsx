@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import { PlusIcon, UserIcon } from "lucide-react"
+import { Lock, PlusIcon, UserIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 import useLocalStorageState from "use-local-storage-state"
@@ -57,14 +57,19 @@ const Rooms = ({ allRooms }: { allRooms: IRoom[] | null }) => {
                   ? handleJoinRoom(room.room_id)
                   : toast.error("Room is full")
               }>
-              <p className="flex items-center gap-2">{room.room_id}</p>
-              <p
-                className={cn(
-                  "flex items-center gap-2",
-                  playersCount === +room.maxPlayers && "text-red-500"
-                )}>
-                {playersCount}/{room.maxPlayers} <UserIcon className="h-4 w-4" />
-              </p>
+              <p className="flex items-center gap-2">{room.roomName}</p>
+              <div className="flex items-center gap-4">
+                {room.isPrivate && <Lock className="h-4 w-4" />}
+                <div>BO{room.bestOf}</div>
+                <p>|</p>
+                <p
+                  className={cn(
+                    "flex items-center gap-2",
+                    playersCount === +room.maxPlayers && "text-red-500"
+                  )}>
+                  {playersCount}/{room.maxPlayers} <UserIcon className="h-4 w-4" />
+                </p>
+              </div>
             </div>
           )
         })}
