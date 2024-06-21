@@ -1,6 +1,6 @@
 import React, { Suspense } from "react"
 
-import Game from "./Game"
+import Game from "../../../components/game"
 
 const GamePage = () => {
   return (
