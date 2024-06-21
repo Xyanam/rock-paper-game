@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 
 import { Bot, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import useLocalStorageState from 'use-local-storage-state';
 
 import GameOption from '@/components/game-option';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ const Game = () => {
   const [userPick, setUserPick] = useState<OptionType | null>(null);
   const [result, setResult] = useState<GameResult | null>(null)
   const router = useRouter()
+  const [username] = useLocalStorageState<string>("username");
 
   useEffect(() => {
     if (userPick && computerPick) {
@@ -37,7 +39,7 @@ const Game = () => {
     <div className="flex justify-center items-center flex-col mt-6 pb-6">
       <div className="border-white border px-10 py-4 rounded-md">
         <div className='flex gap-6 flex-col items-center sm:items-start sm:flex-row'>
-          <Button onClick={() => RoomService.createRoom(router)}>Create room</Button>
+          <Button onClick={() => RoomService.createRoom(router, username)}>Create room</Button>
           <H1 className='flex'>
             <User className="w-10 h-10 mr-2" />
             You

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import toast from "react-hot-toast";
 import useLocalStorageState from "use-local-storage-state";
 
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,9 @@ export default function GameLayout({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setUsername(name)
+    if (name.length) return setUsername(name)
+
+    return toast.error('Enter your name')
   }
 
   if (!username) {

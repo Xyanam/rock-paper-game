@@ -1,72 +1,82 @@
-import { arrayUnion, doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore"
+import { goOffline, onDisconnect, onValue, push, ref, remove, set, update } from "firebase/database"
+import { arrayRemove, doc, updateDoc } from "firebase/firestore"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import toast from "react-hot-toast"
 import { v4 as uuidv4 } from "uuid"
 
 import { IRoom } from "@/types/IRoom"
 
-import { database } from "../configs/firebase-config"
+import { RTDB, database } from "../configs/firebase-config"
 
 export default class RoomService {
-  static async createRoom(router: AppRouterInstance) {
+  static async createRoom(router: AppRouterInstance, username: string | undefined) {
     const roomId = uuidv4()
 
-    const docRef = doc(database, `rooms/${roomId}`)
-
     try {
-      await setDoc(docRef, {
+      const roomRef = ref(RTDB, `rooms/${roomId}`)
+
+      await set(roomRef, {
         room_id: roomId,
         maxPlayers: 2,
-        players: [],
       })
 
       router.push(`/game/${roomId}`)
     } catch (error) {
       toast.error(`Error creating room: ${error}`)
-    }
 
-    router.push(`/game/${roomId}`)
-  }
-
-  static async getRoomData(roomId: string, router: AppRouterInstance): Promise<IRoom | undefined> {
-    const docRef = doc(database, `rooms/${roomId}`)
-    const docSnap = await getDoc(docRef)
-
-    if (docSnap.exists()) {
-      return docSnap.data() as IRoom
-    } else {
-      toast.error("Room not found!")
-      router.push("/")
-
-      return undefined
+      return null
     }
   }
 
-  static async joinRoom(roomData: IRoom, router: AppRouterInstance) {
-    const guestName = `guest ${roomData?.players.length + 1}`
+  static async getRoomData(roomId: string, callback: (data: IRoom) => void) {
+    try {
+      const roomRef = ref(RTDB, `rooms/${roomId}`)
+
+      onValue(roomRef, (snapshot) => {
+        const roomData = snapshot.val() as IRoom
+
+        if (roomData) {
+          callback(roomData)
+        } else {
+          console.error("Room not found")
+        }
+      })
+    } catch (error) {
+      console.error(`Error getting room data: ${error}`)
+    }
+  }
+
+  static async joinRoom(roomId: string, username: string) {
+    const roomRef = ref(RTDB, `rooms/${roomId}/players/${username}`)
+    const userData = {
+      name: username,
+      online: true,
+    }
 
     try {
-      const docRef = doc(database, "rooms", roomData.room_id)
+      await update(roomRef, userData)
 
-      await updateDoc(docRef, {
-        players: arrayUnion(guestName),
-      })
+      onDisconnect(roomRef).remove()
 
-      router.push(`/game/${roomData.room_id}`)
+      return true
     } catch (error) {
-      toast.error(`Error joining room: ${error}`)
+      console.error(`Error joining room: ${error}`)
+
+      return false
     }
   }
 
-  static async subscribeToRoomChanges(roomId: string, callback: (room: IRoom) => void) {
-    const docRef = doc(database, "rooms", roomId)
+  static async leaveRoom(roomId: string, username: string) {
+    const roomRef = ref(RTDB, `rooms/${roomId}/players/${username}`)
 
-    return onSnapshot(docRef, (doc) => {
-      if (doc.exists()) {
-        const roomData = doc.data() as IRoom
+    try {
+      await remove(roomRef)
 
-        callback(roomData)
-      }
-    })
+      return true
+    } catch (error) {
+      console.error(`Error leaving room: ${error}`)
+
+      return false
+    }
   }
 }
