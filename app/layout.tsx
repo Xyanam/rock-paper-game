@@ -1,13 +1,13 @@
-import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 
 import "./globals.css"
 import Header from "@/components/layouts/header"
-import CustomToaster from '@/components/toaster/custom-toaster';
-import Modal from '@/components/ui/modal';
+import CustomToaster from "@/components/toaster/custom-toaster"
+import Modal from "@/components/ui/modal"
 import { cn } from "@/lib/utils"
-import { ReduxProvider } from '@/redux/provider';
+import { ReduxProvider } from "@/redux/provider"
 
 const inter = Inter({ subsets: ["latin"] })
 

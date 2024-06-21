@@ -8,10 +8,10 @@ import rockPaperImage from "../public/images/rock-background.png"
 
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen-without-header px-10 pb-5">
-      <div className="flex max-w-6xl flex-wrap items-center justify-center md:flex-nowrap lg:flex-row flex-col lg:gap-0 gap-5 mt-10 lg:mt-0">
+    <main className="flex min-h-screen-without-header flex-col items-center justify-center px-10 pb-5">
+      <div className="mt-10 flex max-w-6xl flex-col flex-wrap items-center justify-center gap-5 md:flex-nowrap lg:mt-0 lg:flex-row lg:gap-0">
         <div className="flex flex-col gap-4">
-          <h1 className="max-w-2xl md:text-7xl text-4xl font-bold text-white">
+          <h1 className="max-w-2xl text-4xl font-bold text-white md:text-7xl">
             Rock, Paper, Scissors Game
           </h1>
           <p className="max-w-xl text-xl text-gray-300">
@@ -23,9 +23,9 @@ export default function Home() {
               className="px-7 py-6 text-base font-semibold">
               Rules
             </Button>
-            <Link href='/game'>
-              <Button className="px-7 py-6 text-base font-semibold flex gap-2">
-                Start now <ArrowRight className="w-4 h-4" />
+            <Link href="/game">
+              <Button className="flex gap-2 px-7 py-6 text-base font-semibold">
+                Start now <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
           </div>
