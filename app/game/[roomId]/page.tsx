@@ -26,8 +26,7 @@ const Room = () => {
 
       if (username) {
         const isPlayerInRoom = data.players && data.players[username]
-        const isRoomFull =
-          data.players && Object.keys(data.players).length >= data.maxPlayers
+        const isRoomFull = data.players && Object.keys(data.players).length >= +data.maxPlayers
 
         if (isPlayerInRoom) return
         else if (!isRoomFull) RoomService.joinRoom(data.room_id, username)
@@ -49,9 +48,7 @@ const Room = () => {
       <div className="mt-6 flex w-full max-w-md flex-col gap-6 rounded-md border border-white p-4">
         {roomData &&
           Object.keys(roomData.players).map((player) => (
-            <div
-              className="flex items-center justify-between text-white"
-              key={player}>
+            <div className="flex items-center justify-between text-white" key={player}>
               <p className="text-xl">{player}</p>
               <Button
                 size="icon"

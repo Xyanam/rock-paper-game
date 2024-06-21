@@ -4,12 +4,17 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import toast from "react-hot-toast"
 import { v4 as uuidv4 } from "uuid"
 
-import { IRoom } from "@/types/IRoom"
+import { IRoom, IRoomSettings } from "@/types/IRoom"
 
 import { RTDB, database } from "../configs/firebase-config"
 
+interface CreateRoomArgs {
+  router: AppRouterInstance
+  settings: IRoomSettings
+}
+
 export default class RoomService {
-  static async createRoom(router: AppRouterInstance, username: string | undefined) {
+  static async createRoom(router: CreateRoomArgs["router"], settings: CreateRoomArgs["settings"]) {
     const roomId = uuidv4()
 
     try {
@@ -17,7 +22,7 @@ export default class RoomService {
 
       await set(roomRef, {
         room_id: roomId,
-        maxPlayers: 2,
+        ...settings,
       })
 
       router.push(`/game/${roomId}`)
