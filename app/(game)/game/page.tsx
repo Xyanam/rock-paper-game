@@ -1,10 +1,11 @@
 import React, { Suspense } from "react"
 
 import Game from "../../../components/game"
+import Loader from "@/components/loader"
 
 const GamePage = () => {
   return (
-    <Suspense fallback={<h1>Loading...</h1>}>
+    <Suspense fallback={<Loader />}>
       <Game />
     </Suspense>
   )

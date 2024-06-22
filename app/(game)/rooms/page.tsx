@@ -3,9 +3,9 @@
 import React, { Suspense, useEffect, useState } from "react"
 
 import Rooms from "@/components/rooms"
-import { H1 } from "@/components/ui/typography"
 import RoomsService from "@/lib/services/RoomsService"
 import { IRoom } from "@/types/IRoom"
+import Loader from "@/components/loader"
 
 const RoomPage = () => {
   const [allRooms, setAllRooms] = useState<IRoom[]>([])
@@ -26,11 +26,11 @@ const RoomPage = () => {
     return () => clearInterval(interval)
   }, [])
 
-  if (isLoading) return <H1>Loading...</H1>
+  if (isLoading) return <Loader />
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      <Suspense fallback={<h1>Loading..</h1>}>
+      <Suspense fallback={<Loader />}>
         <Rooms allRooms={allRooms} />
       </Suspense>
     </div>

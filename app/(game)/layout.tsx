@@ -33,11 +33,7 @@ export default function GameLayout({
           </p>
         </div>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <Input
-            placeholder="John"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <Input placeholder="John" value={name} onChange={(e) => setName(e.target.value)} />
           <Button type="submit">Submit</Button>
         </form>
       </div>

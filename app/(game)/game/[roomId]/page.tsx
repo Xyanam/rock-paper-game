@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { H1 } from "@/components/ui/typography"
 import RoomService from "@/lib/services/RoomService"
 import { IRoom } from "@/types/IRoom"
+import Loader from "@/components/loader"
 
 const Room = () => {
   const params = useParams<{ roomId: string }>()
@@ -37,14 +38,20 @@ const Room = () => {
       }
     }
 
-    RoomService.getRoomData(params.roomId, handleRoomData)
-  }, [params.roomId, username])
+    RoomService.getRoomData(params.roomId, handleRoomData).catch((err) => {
+      toast.error(err.message)
+      router.push("/rooms")
+    })
+  }, [params.roomId])
 
-  if (isLoading) return <H1>Loading...</H1>
+  if (isLoading) return <Loader />
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <H1>Room #{roomData?.room_id.slice(0, 7)} </H1>
+      <H1>Room {roomData?.roomName} </H1>
+      {roomData && Object.keys(roomData.players).length < +roomData.maxPlayers && (
+        <p className="text-xl text-gray-400">Waiting opponent...</p>
+      )}
       <div className="mt-6 flex w-full max-w-md flex-col gap-6 rounded-md border border-white p-4">
         {roomData &&
           Object.keys(roomData.players).map((player) => (

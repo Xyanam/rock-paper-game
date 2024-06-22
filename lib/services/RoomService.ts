@@ -1,5 +1,4 @@
-import { goOffline, onDisconnect, onValue, push, ref, remove, set, update } from "firebase/database"
-import { arrayRemove, doc, updateDoc } from "firebase/firestore"
+import { onDisconnect, onValue, ref, remove, set, update } from "firebase/database"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import toast from "react-hot-toast"
 import { v4 as uuidv4 } from "uuid"
@@ -33,22 +32,31 @@ export default class RoomService {
     }
   }
 
-  static async getRoomData(roomId: string, callback: (data: IRoom) => void) {
-    try {
-      const roomRef = ref(RTDB, `rooms/${roomId}`)
+  static getRoomData(roomId: string, callback: (data: IRoom) => void): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        const roomRef = ref(RTDB, `rooms/${roomId}`)
 
-      onValue(roomRef, (snapshot) => {
-        const roomData = snapshot.val() as IRoom
+        onValue(
+          roomRef,
+          (snapshot) => {
+            const roomData = snapshot.val() as IRoom
 
-        if (roomData) {
-          callback(roomData)
-        } else {
-          console.error("Room not found")
-        }
-      })
-    } catch (error) {
-      console.error(`Error getting room data: ${error}`)
-    }
+            if (roomData) {
+              callback(roomData)
+              resolve()
+            } else {
+              reject(new Error("Room not found"))
+            }
+          },
+          (error) => {
+            reject(error)
+          }
+        )
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
   static async joinRoom(roomId: string, username: string) {
@@ -73,14 +81,12 @@ export default class RoomService {
 
   static async leaveRoom(roomId: string, username: string) {
     const roomRef = ref(RTDB, `rooms/${roomId}/players/${username}`)
-
     try {
       await remove(roomRef)
 
       return true
     } catch (error) {
       console.error(`Error leaving room: ${error}`)
-
       return false
     }
   }
