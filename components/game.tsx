@@ -26,7 +26,9 @@ const Game = ({ type, roomData }: GameProps) => {
   const [username] = useLocalStorageState<string>("username")
 
   const [isLoading, setIsLoading] = useState(type === "multi")
-  const [computerPick, setComputerPick] = useState<OptionType>(OptionsTypes[getRandomNumber(3)])
+  const [computerPick, setComputerPick] = useState<OptionType | null>(
+    OptionsTypes[getRandomNumber(3)]
+  )
   const [userPick, setUserPick] = useState<OptionType | null>(null)
   const [opponentPick, setOpponentPick] = useState<OptionType | null>(null)
   const [result, setResult] = useState<GameResult | null>(null)
@@ -60,8 +62,12 @@ const Game = ({ type, roomData }: GameProps) => {
   }, [userPick, computerPick, opponentPick, type])
 
   useEffect(() => {
-    if (roomData?.game.playerChoices && Object.keys(roomData?.game.playerChoices).length) {
-      setUserPick(roomData?.game.playerChoices[username] || null)
+    if (
+      roomData?.game.playerChoices &&
+      Object.keys(roomData?.game.playerChoices).length &&
+      username
+    ) {
+      setUserPick((roomData?.game.playerChoices[username] as OptionType) || null)
     }
   }, [roomData])
 

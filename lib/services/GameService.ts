@@ -2,7 +2,7 @@ import { onValue, ref, set, update } from "firebase/database"
 import { RTDB } from "../configs/firebase-config"
 
 export default class GameService {
-  static async makeChoice(roomId: string, username: string, choice: string) {
+  static async makeChoice(roomId: string, username: string, choice: string | null) {
     const choiceRef = ref(RTDB, `rooms/${roomId}/game/playerChoices/${username}`)
 
     try {

@@ -7,7 +7,7 @@ import Scissors from "../public/images/scissors.png"
 import { OptionType } from "@/types/TGameOptions"
 
 interface GameOptionProps {
-  type: OptionType | "no-access"
+  type: OptionType | "no-access" | null
   onClick?: () => void
 }
 
@@ -19,6 +19,8 @@ const images = {
 }
 
 const GameOption = ({ type, onClick }: GameOptionProps) => {
+  if (!type) return
+
   const src = images[type]
 
   return (
