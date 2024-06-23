@@ -1,16 +1,13 @@
-import React from 'react'
-
-import Image from 'next/image'
-
-import { OptionType } from '@/types/TGameOptions'
-
-import Paper from '../public/images/paper.png'
-import Question from '../public/images/question.png'
-import Rock from '../public/images/rock.png'
-import Scissors from '../public/images/scissors.png'
+import React from "react"
+import Image from "next/image"
+import Paper from "../public/images/paper.png"
+import Question from "../public/images/question.png"
+import Rock from "../public/images/rock.png"
+import Scissors from "../public/images/scissors.png"
+import { OptionType } from "@/types/TGameOptions"
 
 interface GameOptionProps {
-  type: OptionType
+  type: OptionType | "no-access"
   onClick?: () => void
 }
 
@@ -18,18 +15,21 @@ const images = {
   rock: Rock,
   paper: Paper,
   scissors: Scissors,
-  'no-access': Question,
-
+  "no-access": Question,
 }
 
 const GameOption = ({ type, onClick }: GameOptionProps) => {
   const src = images[type]
 
-  if (!src) return;
-
   return (
-    <div className={`w-48 h-48 bg-white rounded-full flex justify-center items-center cursor-pointer shadow-md shadow-black p-4 hover:bg-white/90 transition-all`} onClick={onClick}>
-      <Image src={src} alt={type} />
+    <div
+      className={`flex h-48 w-48 cursor-pointer items-center justify-center rounded-full bg-white p-4 shadow-md shadow-black transition-all hover:bg-white/90`}
+      onClick={onClick}>
+      {src ? (
+        <Image src={src} alt={type} />
+      ) : (
+        <h1 className="text-4xl font-bold text-white">Waiting for opponent...</h1>
+      )}
     </div>
   )
 }

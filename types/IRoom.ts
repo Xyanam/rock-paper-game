@@ -8,6 +8,13 @@ export interface IRoom {
   isPrivate: boolean
   maxPlayers: string
   players: { [key: string]: IPlayer }
+  game: {
+    status: "waiting"
+    playerChoices?: {
+      [key: string]: string
+    }
+    result?: string
+  }
   roomName: string
   roomPassword?: string
   room_id: string

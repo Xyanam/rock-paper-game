@@ -21,6 +21,11 @@ export default class RoomService {
 
       await set(roomRef, {
         room_id: roomId,
+        game: {
+          status: "waiting",
+          playerChoices: {},
+          result: null,
+        },
         ...settings,
       })
 

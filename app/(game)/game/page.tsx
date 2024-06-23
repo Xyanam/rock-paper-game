@@ -6,7 +6,7 @@ import Loader from "@/components/loader"
 const GamePage = () => {
   return (
     <Suspense fallback={<Loader />}>
-      <Game />
+      <Game type="single" />
     </Suspense>
   )
 }
