@@ -1,6 +1,16 @@
+import { OptionType } from "./TGameOptions"
+
 export interface IPlayer {
   name: string
   online: boolean
+}
+
+export interface IGame {
+  status: string
+  playerChoices?: {
+    [key: string]: OptionType
+  }
+  result?: string
 }
 
 export interface IRoom {
@@ -8,13 +18,7 @@ export interface IRoom {
   isPrivate: boolean
   maxPlayers: string
   players: { [key: string]: IPlayer }
-  game: {
-    status: "waiting"
-    playerChoices?: {
-      [key: string]: string
-    }
-    result?: string
-  }
+  game: IGame
   roomName: string
   roomPassword?: string
   room_id: string

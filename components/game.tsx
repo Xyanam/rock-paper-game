@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Bot, User } from "lucide-react"
 import { useParams } from "next/navigation"
 import useLocalStorageState from "use-local-storage-state"
@@ -14,7 +14,7 @@ import { getRandomNumber } from "@/lib/utils"
 import { GameResult, OptionType, OptionsTypes } from "@/types/TGameOptions"
 import { RESULT_GAME, RESULT_LOSE, RESULT_WIN } from "@/lib/constants/constants"
 import GameService from "@/lib/services/GameService"
-import { IRoom } from "@/types/IRoom"
+import { IGame, IRoom } from "@/types/IRoom"
 
 interface GameProps {
   type: "single" | "multi"
@@ -26,16 +26,14 @@ const Game = ({ type, roomData }: GameProps) => {
   const [username] = useLocalStorageState<string>("username")
 
   const [isLoading, setIsLoading] = useState(type === "multi")
-  const [computerPick, setComputerPick] = useState<OptionType | null>(
-    OptionsTypes[getRandomNumber(3)]
-  )
+  const [computerPick, setComputerPick] = useState<OptionType>(OptionsTypes[getRandomNumber(3)])
   const [userPick, setUserPick] = useState<OptionType | null>(null)
   const [opponentPick, setOpponentPick] = useState<OptionType | null>(null)
   const [result, setResult] = useState<GameResult | null>(null)
 
   useEffect(() => {
     if (type === "multi") {
-      const handleRoomData = (data: any) => {
+      GameService.onGameUpdate(params.roomId, (data: IGame) => {
         setIsLoading(false)
 
         if (username && data.playerChoices) {
@@ -46,12 +44,8 @@ const Game = ({ type, roomData }: GameProps) => {
           setUserPick(null)
           setOpponentPick(null)
         }
-      }
-
-      GameService.onGameUpdate(params.roomId, handleRoomData)
-    } else {
-      setOpponentPick(OptionsTypes[getRandomNumber(3)])
-    }
+      })
+    } else setOpponentPick(OptionsTypes[getRandomNumber(3)])
   }, [params.roomId, username, type])
 
   useEffect(() => {
@@ -62,21 +56,20 @@ const Game = ({ type, roomData }: GameProps) => {
   }, [userPick, computerPick, opponentPick, type])
 
   useEffect(() => {
-    if (
-      roomData?.game.playerChoices &&
-      Object.keys(roomData?.game.playerChoices).length &&
-      username
-    ) {
-      setUserPick((roomData?.game.playerChoices[username] as OptionType) || null)
+    if (roomData?.game.playerChoices && Object.keys(roomData?.game.playerChoices).length) {
+      setUserPick(username ? (roomData?.game.playerChoices[username] as OptionType) : null)
     }
   }, [roomData])
 
-  const handlePick = async (pick: OptionType) => {
-    setUserPick(pick)
-    if (type === "multi" && username) {
-      await GameService.makeChoice(params.roomId, username, pick)
-    }
-  }
+  const handlePick = useCallback(
+    async (pick: OptionType) => {
+      setUserPick(pick)
+      if (type === "multi" && username) {
+        await GameService.makeChoice(params.roomId, username, pick)
+      }
+    },
+    [params.roomId, username, type]
+  )
 
   const handleReset = async () => {
     setUserPick(null)

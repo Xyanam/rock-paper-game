@@ -88,9 +88,8 @@ const Room = () => {
     )
   }
 
-  if ([STATUS_IN_PROGRESS, STATUS_FINISHED].includes(roomData?.game.status)) {
+  if ([STATUS_IN_PROGRESS, STATUS_FINISHED].includes(roomData?.game.status))
     return <Game type="multi" roomData={roomData} />
-  }
 }
 
 export default Room

@@ -1,4 +1,3 @@
-import { IRoom } from "@/types/IRoom"
 import GameService from "../services/GameService"
 import toast from "react-hot-toast"
 
