@@ -1,8 +1,8 @@
 import { OptionType, GameResult } from "@/types/TGameOptions"
 
 export const determineWinner = (
-  playerOnePick: OptionType,
-  playerTwoPick: OptionType
+  playerOnePick: OptionType | null,
+  playerTwoPick: OptionType | null
 ): GameResult => {
   if (playerOnePick === playerTwoPick) {
     return "draw"
