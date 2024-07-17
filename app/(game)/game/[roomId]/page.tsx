@@ -12,7 +12,12 @@ import { H1 } from "@/components/ui/typography"
 import RoomService from "@/lib/services/RoomService"
 import { IRoom } from "@/types/IRoom"
 import Loader from "@/components/loader"
-import { STATUS_FINISHED, STATUS_IN_PROGRESS, STATUS_WAITING } from "@/lib/constants/constants"
+import {
+  GAME_TYPE_MULTI,
+  STATUS_FINISHED,
+  STATUS_IN_PROGRESS,
+  STATUS_WAITING,
+} from "@/lib/constants/constants"
 import Game from "@/components/game"
 import { handleStartGame } from "@/lib/helpers/startGame"
 
@@ -89,7 +94,7 @@ const Room = () => {
   }
 
   if ([STATUS_IN_PROGRESS, STATUS_FINISHED].includes(roomData?.game.status))
-    return <Game type="multi" roomData={roomData} />
+    return <Game type={GAME_TYPE_MULTI} roomData={roomData} />
 }
 
 export default Room
