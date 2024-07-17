@@ -11,3 +11,6 @@ export const RESULT_GAME = {
   [RESULT_LOSE]: "You lose!",
   [RESULT_DRAW]: "It's a Draw!",
 }
+
+export const GAME_TYPE_MULTI = "multi"
+export const GAME_TYPE_SINGLE = "single"

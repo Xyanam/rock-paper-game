@@ -12,7 +12,13 @@ import Loader from "@/components/loader"
 import { determineWinner } from "@/lib/helpers/determineWinner"
 import { getRandomNumber } from "@/lib/utils"
 import { GameResult, OptionType, OptionsTypes } from "@/types/TGameOptions"
-import { RESULT_GAME, RESULT_LOSE, RESULT_WIN } from "@/lib/constants/constants"
+import {
+  GAME_TYPE_MULTI,
+  GAME_TYPE_SINGLE,
+  RESULT_GAME,
+  RESULT_LOSE,
+  RESULT_WIN,
+} from "@/lib/constants/constants"
 import GameService from "@/lib/services/GameService"
 import { IGame, IRoom } from "@/types/IRoom"
 
@@ -25,14 +31,14 @@ const Game = ({ type, roomData }: GameProps) => {
   const params = useParams<{ roomId: string }>()
   const [username] = useLocalStorageState<string>("username")
 
-  const [isLoading, setIsLoading] = useState(type === "multi")
+  const [isLoading, setIsLoading] = useState(type === GAME_TYPE_MULTI)
   const [computerPick, setComputerPick] = useState<OptionType>(OptionsTypes[getRandomNumber(3)])
   const [userPick, setUserPick] = useState<OptionType | null>(null)
   const [opponentPick, setOpponentPick] = useState<OptionType | null>(null)
   const [result, setResult] = useState<GameResult | null>(null)
 
   useEffect(() => {
-    if (type === "multi") {
+    if (type === GAME_TYPE_MULTI) {
       GameService.onGameUpdate(params.roomId, (data: IGame) => {
         setIsLoading(false)
 
@@ -50,7 +56,10 @@ const Game = ({ type, roomData }: GameProps) => {
 
   useEffect(() => {
     if (userPick && (computerPick || opponentPick)) {
-      const result = determineWinner(userPick, type === "single" ? computerPick : opponentPick)
+      const result = determineWinner(
+        userPick,
+        type === GAME_TYPE_SINGLE ? computerPick : opponentPick
+      )
       setResult(result)
     }
   }, [userPick, computerPick, opponentPick, type])
@@ -64,7 +73,7 @@ const Game = ({ type, roomData }: GameProps) => {
   const handlePick = useCallback(
     async (pick: OptionType) => {
       setUserPick(pick)
-      if (type === "multi" && username) {
+      if (type === GAME_TYPE_MULTI && username) {
         await GameService.makeChoice(params.roomId, username, pick)
       }
     },
@@ -73,11 +82,11 @@ const Game = ({ type, roomData }: GameProps) => {
 
   const handleReset = async () => {
     setUserPick(null)
-    setOpponentPick(type === "multi" ? null : OptionsTypes[getRandomNumber(3)])
+    setOpponentPick(type === GAME_TYPE_MULTI ? null : OptionsTypes[getRandomNumber(3)])
     setComputerPick(OptionsTypes[getRandomNumber(3)])
     setResult(null)
 
-    if (type === "multi" && roomData) {
+    if (type === GAME_TYPE_MULTI && roomData) {
       const roomPlayers = Object.keys(roomData.players)
       const promises = roomPlayers.map((player) =>
         GameService.makeChoice(params.roomId, player, null)
@@ -98,7 +107,7 @@ const Game = ({ type, roomData }: GameProps) => {
           </H1>
           <h1 className="flex items-center text-center text-4xl font-bold text-white">VS</h1>
           <H1 className="flex">
-            {type === "single" ? <Bot className="mr-2 h-10 w-10" /> : "Opponent"}
+            {type === GAME_TYPE_SINGLE ? <Bot className="mr-2 h-10 w-10" /> : "Opponent"}
           </H1>
         </div>
       </div>
@@ -138,10 +147,12 @@ const Game = ({ type, roomData }: GameProps) => {
 
             <div className="flex h-full w-full max-w-xl flex-col justify-between">
               <H1 className="text-center text-4xl font-bold text-white">
-                {type === "single" ? "Computer picked" : "Opponent picked"}
+                {type === GAME_TYPE_SINGLE ? "Computer picked" : "Opponent picked"}
               </H1>
               <div className="mt-14 flex flex-wrap justify-center gap-10">
-                <GameOption type={type === "single" ? computerPick : opponentPick ?? "no-access"} />
+                <GameOption
+                  type={type === GAME_TYPE_SINGLE ? computerPick : opponentPick ?? "no-access"}
+                />
               </div>
             </div>
           </div>
